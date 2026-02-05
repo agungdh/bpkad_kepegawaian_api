@@ -2,15 +2,15 @@
 CREATE TABLE users (
     id BIGSERIAL PRIMARY KEY,
     uuid UUID NOT NULL DEFAULT gen_random_uuid() UNIQUE,
-    username VARCHAR(50) NOT NULL UNIQUE,
+    username VARCHAR(50) NOT NULL,
     password VARCHAR(255) NOT NULL,
     enabled BOOLEAN NOT NULL DEFAULT TRUE,
-    pegawai_id BIGINT,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP,
-    created_by BIGINT NOT NULL,
-    updated_by BIGINT NOT NULL,
+    pegawai_id BIGINT NOT NULL,
+    created_at BIGINT,
+    updated_at BIGINT,
+    deleted_at BIGINT,
+    created_by BIGINT,
+    updated_by BIGINT,
     deleted_by BIGINT,
     CONSTRAINT fk_users_pegawai FOREIGN KEY (pegawai_id) REFERENCES pegawai(id)
 );
@@ -20,11 +20,11 @@ CREATE TABLE roles (
     id BIGSERIAL PRIMARY KEY,
     uuid UUID NOT NULL DEFAULT gen_random_uuid() UNIQUE,
     name VARCHAR(50) NOT NULL UNIQUE,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP,
-    created_by BIGINT NOT NULL,
-    updated_by BIGINT NOT NULL,
+    created_at BIGINT,
+    updated_at BIGINT,
+    deleted_at BIGINT,
+    created_by BIGINT,
+    updated_by BIGINT,
     deleted_by BIGINT
 );
 
@@ -38,9 +38,7 @@ CREATE TABLE user_roles (
 );
 
 -- Index for username lookup
-CREATE INDEX idx_users_username ON users (username);
+CREATE UNIQUE INDEX idx_users_username_active ON users (username) WHERE deleted_at IS NULL;
 
--- Insert default roles
-INSERT INTO roles (name, created_by, updated_by) VALUES
-    ('USER', 1, 1),
-    ('ADMIN', 1, 1);
+-- Partial unique index untuk pegawai_id (exclude soft deleted)
+CREATE UNIQUE INDEX idx_users_pegawai_id_active ON users (pegawai_id) WHERE deleted_at IS NULL;

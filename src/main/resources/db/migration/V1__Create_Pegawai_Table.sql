@@ -1,15 +1,15 @@
--- Table pegawai dengan audit columns
+-- Table pegawai dengan audit columns (epoch millis, nullable for direct DB injection)
 CREATE TABLE pegawai (
     id BIGSERIAL PRIMARY KEY,
     uuid UUID NOT NULL DEFAULT gen_random_uuid() UNIQUE,
     nip VARCHAR(50) NOT NULL,
     nama VARCHAR(255) NOT NULL,
     email VARCHAR(255),
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP,
-    created_by BIGINT NOT NULL,
-    updated_by BIGINT NOT NULL,
+    created_at BIGINT,
+    updated_at BIGINT,
+    deleted_at BIGINT,
+    created_by BIGINT,
+    updated_by BIGINT,
     deleted_by BIGINT
 );
 
