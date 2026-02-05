@@ -2,9 +2,11 @@ package id.my.agungdh.bpkadkepegawaian.repository.base;
 
 import id.my.agungdh.bpkadkepegawaian.entity.base.BaseEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -19,11 +21,13 @@ public interface BaseRepository<T extends BaseEntity> extends JpaRepository<T, L
     Optional<T> findByUuidIncludingDeleted(@Param("uuid") java.util.UUID uuid);
 
     // Soft delete
+    @Modifying
     @Query("UPDATE #{#entityName} e SET e.deletedAt = :now, e.deletedBy = :userId WHERE e.id = :id")
     void softDelete(@Param("id") Long id, @Param("userId") Long userId, @Param("now") Long now);
 
     // Override default delete to soft delete
     @Override
+    @Transactional
     default void deleteById(Long id) {
         softDelete(id, getCurrentUserId(), System.currentTimeMillis());
     }

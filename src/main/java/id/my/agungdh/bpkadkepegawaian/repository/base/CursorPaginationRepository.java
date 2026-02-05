@@ -34,6 +34,9 @@ public class CursorPaginationRepository {
         var cq = cb.createQuery(entityClass);
         var root = cq.from(entityClass);
 
+        // Filter out soft-deleted records
+        cq.where(cb.isNull(root.get("deletedAt")));
+
         // If cursor is provided, find the entity by UUID and filter by id
         if (cursorUuid != null) {
             // First, get the entity's id by uuid
@@ -42,7 +45,7 @@ public class CursorPaginationRepository {
                 var comparison = ascending
                         ? cb.greaterThan(root.get("id"), cursorId)
                         : cb.lessThan(root.get("id"), cursorId);
-                cq.where(comparison);
+                cq.where(cb.and(cb.isNull(root.get("deletedAt")), comparison));
             }
         }
 
