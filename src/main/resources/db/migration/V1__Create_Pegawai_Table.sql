@@ -18,6 +18,3 @@ CREATE UNIQUE INDEX idx_pegawai_nip_active ON pegawai (nip) WHERE deleted_at IS 
 
 -- Index untuk uuid (hash untuk frontend lookup)
 CREATE INDEX idx_pegawai_uuid ON pegawai USING HASH (uuid);
-
--- Apply audit trigger
-SELECT apply_audit('pegawai');

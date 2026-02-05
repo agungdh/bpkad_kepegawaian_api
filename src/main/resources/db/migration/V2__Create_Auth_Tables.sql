@@ -40,10 +40,6 @@ CREATE TABLE user_roles (
 -- Index for username lookup
 CREATE INDEX idx_users_username ON users (username);
 
--- Apply audit triggers
-SELECT apply_audit('users');
-SELECT apply_audit('roles');
-
 -- Insert default roles
 INSERT INTO roles (name, created_by, updated_by) VALUES
     ('USER', 1, 1),
