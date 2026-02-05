@@ -3,7 +3,6 @@ package id.my.agungdh.bpkadkepegawaian.controller;
 import id.my.agungdh.bpkadkepegawaian.dto.LoginRequest;
 import id.my.agungdh.bpkadkepegawaian.dto.LoginResponse;
 import id.my.agungdh.bpkadkepegawaian.dto.RefreshTokenRequest;
-import id.my.agungdh.bpkadkepegawaian.dto.RegisterRequest;
 import id.my.agungdh.bpkadkepegawaian.security.UserAuthentication;
 import id.my.agungdh.bpkadkepegawaian.service.AuthService;
 import id.my.agungdh.bpkadkepegawaian.service.TokenService;
@@ -26,13 +25,6 @@ public class AuthController {
 
     private final AuthService authService;
     private final TokenService tokenService;
-
-    @PostMapping("/register")
-    @Operation(summary = "Register a new user")
-    public ResponseEntity<Void> register(@Valid @RequestBody RegisterRequest request) {
-        authService.register(request);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
 
     @PostMapping("/login")
     @Operation(summary = "Login with username and password")

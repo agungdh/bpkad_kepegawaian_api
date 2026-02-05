@@ -3,12 +3,9 @@ package id.my.agungdh.bpkadkepegawaian.service;
 import id.my.agungdh.bpkadkepegawaian.dto.LoginRequest;
 import id.my.agungdh.bpkadkepegawaian.dto.LoginResponse;
 import id.my.agungdh.bpkadkepegawaian.dto.RefreshTokenRequest;
-import id.my.agungdh.bpkadkepegawaian.dto.RegisterRequest;
 import id.my.agungdh.bpkadkepegawaian.dto.UserData;
-import id.my.agungdh.bpkadkepegawaian.entity.Role;
 import id.my.agungdh.bpkadkepegawaian.entity.User;
 import id.my.agungdh.bpkadkepegawaian.entity.UserRole;
-import id.my.agungdh.bpkadkepegawaian.repository.RoleRepository;
 import id.my.agungdh.bpkadkepegawaian.repository.UserRepository;
 import id.my.agungdh.bpkadkepegawaian.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,40 +23,12 @@ import java.util.stream.Collectors;
 public class AuthService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
 
     @Value("${application.security.token.ttl:86400}")
     private long tokenTtl;
-
-    @Transactional
-    public void register(RegisterRequest request) {
-        if (userRepository.existsByUsernameAndDeletedAtIsNull(request.getUsername())) {
-            throw new IllegalArgumentException("Username already exists");
-        }
-
-        User user = new User();
-        user.setUsername(request.getUsername());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setEnabled(true);
-        user.setCreatedBy(1L); // System user
-        user.setUpdatedBy(1L);
-
-        userRepository.save(user);
-
-        // Assign default USER role
-        Role userRole = roleRepository.findByNameAndDeletedAtIsNull("USER")
-                .orElseThrow(() -> new IllegalStateException("Default USER role not found"));
-
-        UserRole UserRole = new UserRole();
-        UserRole.setUser(user);
-        UserRole.setRole(userRole);
-        userRoleRepository.save(UserRole);
-
-        log.info("Registered new user: {}", request.getUsername());
-    }
 
     public LoginResponse login(LoginRequest request) {
         User user = userRepository.findByUsernameAndDeletedAtIsNull(request.getUsername())
