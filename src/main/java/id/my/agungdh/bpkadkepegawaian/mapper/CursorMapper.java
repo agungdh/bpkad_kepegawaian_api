@@ -4,7 +4,6 @@ import id.my.agungdh.bpkadkepegawaian.dto.CursorPage;
 import id.my.agungdh.bpkadkepegawaian.entity.base.BaseEntity;
 import org.mapstruct.Mapper;
 
-import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.List;
 
@@ -12,8 +11,8 @@ import java.util.List;
 public interface CursorMapper {
 
     // Encode entity ID + timestamp ke cursor (base64)
-    default String encodeCursor(Long id, LocalDateTime updatedAt) {
-        String cursorValue = id + ":" + updatedAt.toString();
+    default String encodeCursor(Long id, Long updatedAt) {
+        String cursorValue = id + ":" + updatedAt;
         return Base64.getEncoder().encodeToString(cursorValue.getBytes());
     }
 

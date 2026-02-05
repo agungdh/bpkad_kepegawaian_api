@@ -11,5 +11,9 @@ public record PegawaiCreateRequest(
         String nama,
 
         @Email(message = "Format email tidak valid")
-        String email
+        String email,
+
+        String skpdUuid,
+
+        String bidangUuid
 ) {}

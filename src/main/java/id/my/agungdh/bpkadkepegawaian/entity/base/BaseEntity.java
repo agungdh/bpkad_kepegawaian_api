@@ -3,17 +3,10 @@ package id.my.agungdh.bpkadkepegawaian.entity.base;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 public abstract class BaseEntity {
@@ -25,22 +18,18 @@ public abstract class BaseEntity {
     @Column(name = "uuid", nullable = false, unique = true, updatable = false)
     private UUID uuid;
 
-    @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private Long createdAt;
 
-    @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
+    private Long updatedAt;
 
     @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
+    private Long deletedAt;
 
-    @CreatedBy
     @Column(name = "created_by", nullable = false, updatable = false)
     private Long createdBy;
 
-    @LastModifiedBy
     @Column(name = "updated_by", nullable = false)
     private Long updatedBy;
 
@@ -52,5 +41,23 @@ public abstract class BaseEntity {
         if (uuid == null) {
             uuid = UUID.randomUUID();
         }
+        long now = System.currentTimeMillis();
+        if (createdAt == null) {
+            createdAt = now;
+        }
+        if (updatedAt == null) {
+            updatedAt = now;
+        }
+        if (createdBy == null) {
+            createdBy = 1L; // TODO: from security context
+        }
+        if (updatedBy == null) {
+            updatedBy = 1L; // TODO: from security context
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = System.currentTimeMillis();
     }
 }

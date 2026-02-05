@@ -19,4 +19,18 @@ public class Pegawai extends BaseEntity {
 
     @Column(name = "email")
     private String email;
+
+    @Column(name = "skpd_id")
+    private Long skpdId;
+
+    @Column(name = "bidang_id")
+    private Long bidangId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "skpd_id", insertable = false, updatable = false)
+    private Skpd skpd;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bidang_id", insertable = false, updatable = false)
+    private Bidang bidang;
 }

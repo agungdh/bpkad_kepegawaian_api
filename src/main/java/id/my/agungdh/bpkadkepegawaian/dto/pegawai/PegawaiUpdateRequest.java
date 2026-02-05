@@ -6,5 +6,7 @@ public record PegawaiUpdateRequest(
         String nip,
         String nama,
         @Email(message = "Format email tidak valid")
-        String email
+        String email,
+        String skpdUuid,
+        String bidangUuid
 ) {}

@@ -19,13 +19,13 @@ public interface BaseRepository<T extends BaseEntity> extends JpaRepository<T, L
     Optional<T> findByUuidIncludingDeleted(@Param("uuid") java.util.UUID uuid);
 
     // Soft delete
-    @Query("UPDATE #{#entityName} e SET e.deletedAt = CURRENT_TIMESTAMP, e.deletedBy = :userId WHERE e.id = :id")
-    void softDelete(@Param("id") Long id, @Param("userId") Long userId);
+    @Query("UPDATE #{#entityName} e SET e.deletedAt = :now, e.deletedBy = :userId WHERE e.id = :id")
+    void softDelete(@Param("id") Long id, @Param("userId") Long userId, @Param("now") Long now);
 
     // Override default delete to soft delete
     @Override
     default void deleteById(Long id) {
-        softDelete(id, getCurrentUserId());
+        softDelete(id, getCurrentUserId(), System.currentTimeMillis());
     }
 
     default Long getCurrentUserId() {

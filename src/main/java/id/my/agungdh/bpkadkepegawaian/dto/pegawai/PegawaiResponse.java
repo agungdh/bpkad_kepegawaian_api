@@ -1,12 +1,14 @@
 package id.my.agungdh.bpkadkepegawaian.dto.pegawai;
 
-import java.time.LocalDateTime;
-
 public record PegawaiResponse(
-        String uuid,  // Hanya UUID, ID serial tidak di-expose
+        String uuid,
         String nip,
         String nama,
         String email,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        String skpdUuid,
+        String skpdNama,
+        String bidangUuid,
+        String bidangNama,
+        Long createdAt,
+        Long updatedAt
 ) {}
