@@ -36,7 +36,7 @@ public class SkpdController {
     ) {
         SkpdSortableField sortField = sortBy != null ? SkpdSortableField.valueOf(sortBy) : SkpdSortableField.ID;
         SortDirection direction = sortDirection != null ? SortDirection.valueOf(sortDirection) : SortDirection.ASC;
-        return skpdService.list(new CursorRequest(cursor, limit).withDefaults(), sortField, direction);
+        return skpdService.list(CursorRequest.of(cursor, limit), sortField, direction);
     }
 
     @GetMapping("/{uuid}")

@@ -37,7 +37,7 @@ public class PegawaiController {
     ) {
         PegawaiSortableField sortField = sortBy != null ? PegawaiSortableField.valueOf(sortBy) : PegawaiSortableField.ID;
         SortDirection direction = sortDirection != null ? SortDirection.valueOf(sortDirection) : SortDirection.ASC;
-        return pegawaiService.list(new CursorRequest(cursor, limit).withDefaults(), sortField, direction);
+        return pegawaiService.list(CursorRequest.of(cursor, limit), sortField, direction);
     }
 
     @GetMapping("/{uuid}")

@@ -36,7 +36,7 @@ public class BidangController {
     ) {
         BidangSortableField sortField = sortBy != null ? BidangSortableField.valueOf(sortBy) : BidangSortableField.ID;
         SortDirection direction = sortDirection != null ? SortDirection.valueOf(sortDirection) : SortDirection.ASC;
-        return bidangService.list(new CursorRequest(cursor, limit).withDefaults(), sortField, direction);
+        return bidangService.list(CursorRequest.of(cursor, limit), sortField, direction);
     }
 
     @GetMapping("/{uuid}")
