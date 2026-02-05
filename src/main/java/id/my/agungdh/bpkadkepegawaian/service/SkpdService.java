@@ -25,15 +25,14 @@ public class SkpdService {
     private final CursorPaginationRepository cursorPaginationRepository;
 
     public CursorPage<SkpdResponse> list(CursorRequest request) {
-        Long cursorValue = null;
+        UUID cursorUuid = null;
         if (request.cursor() != null) {
-            cursorValue = Long.parseLong(new String(java.util.Base64.getDecoder().decode(request.cursor())).split(":")[0]);
+            cursorUuid = UUID.fromString(new String(java.util.Base64.getDecoder().decode(request.cursor())).split(":")[0]);
         }
 
         List<Skpd> entities = cursorPaginationRepository.fetchCursor(
                 Skpd.class,
-                "id",
-                cursorValue,
+                cursorUuid,
                 request.limit() + 1,
                 true
         );
@@ -50,7 +49,7 @@ public class SkpdService {
         String nextCursor = null;
         if (hasNext && !entities.isEmpty()) {
             Skpd last = entities.get(entities.size() - 1);
-            String cursorValueStr = last.getId() + ":" + last.getUpdatedAt();
+            String cursorValueStr = last.getUuid() + ":" + last.getUpdatedAt();
             nextCursor = java.util.Base64.getEncoder().encodeToString(cursorValueStr.getBytes());
         }
 
