@@ -20,7 +20,10 @@ public class User extends BaseEntity {
     @Column(name = "enabled", nullable = false)
     private Boolean enabled = true;
 
+    @Column(name = "pegawai_id", nullable = false)
+    private Long pegawaiId;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pegawai_id")
+    @JoinColumn(name = "pegawai_id", insertable = false, updatable = false)
     private Pegawai pegawai;
 }
