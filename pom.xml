@@ -176,6 +176,12 @@
             <plugin>
                 <groupId>org.graalvm.buildtools</groupId>
                 <artifactId>native-maven-plugin</artifactId>
+                <configuration>
+                    <buildArgs>
+                        <arg>-march=x86-64-v2</arg>
+                    </buildArgs>
+                    <imageName>bpkad-kepegawaian</imageName>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
