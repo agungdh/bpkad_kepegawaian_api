@@ -7,9 +7,11 @@ spring:
     password: ${DB_PASSWORD:postgres}
     hikari:
       maximum-pool-size: 2
+  flyway:
+    enabled: true
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       org.hibernate:
         dialect: org.hibernate.community.dialect.PostgreSQLDialect
