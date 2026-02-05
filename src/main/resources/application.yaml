@@ -7,8 +7,6 @@ spring:
     password: ${DB_PASSWORD:postgres}
     hikari:
       maximum-pool-size: 2
-  flyway:
-    enabled: true
   jpa:
     hibernate:
       ddl-auto: validate
