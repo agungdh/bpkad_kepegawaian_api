@@ -5,6 +5,9 @@ spring:
     enabled: true
     locations: classpath:db/migration
     baseline-on-migrate: true
+  sql:
+    init:
+      mode: always # Run SQL scripts on startup
   datasource:
     url: jdbc:postgresql://localhost:5432/bpkad_kepegawaian
     username: postgres
