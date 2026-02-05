@@ -5,6 +5,8 @@ import id.my.agungdh.bpkadkepegawaian.dto.CursorRequest;
 import id.my.agungdh.bpkadkepegawaian.dto.pegawai.PegawaiCreateRequest;
 import id.my.agungdh.bpkadkepegawaian.dto.pegawai.PegawaiResponse;
 import id.my.agungdh.bpkadkepegawaian.dto.pegawai.PegawaiUpdateRequest;
+import id.my.agungdh.bpkadkepegawaian.dto.sort.PegawaiSortableField;
+import id.my.agungdh.bpkadkepegawaian.dto.sort.SortDirection;
 import id.my.agungdh.bpkadkepegawaian.entity.Pegawai;
 import id.my.agungdh.bpkadkepegawaian.entity.Skpd;
 import id.my.agungdh.bpkadkepegawaian.entity.Bidang;
@@ -31,7 +33,7 @@ public class PegawaiService {
     private final PegawaiMapper pegawaiMapper;
     private final CursorPaginationRepository cursorPaginationRepository;
 
-    public CursorPage<PegawaiResponse> list(CursorRequest request) {
+    public CursorPage<PegawaiResponse> list(CursorRequest request, PegawaiSortableField sortBy, SortDirection direction) {
         UUID cursorUuid = null;
         if (request.cursor() != null) {
             cursorUuid = UUID.fromString(new String(java.util.Base64.getDecoder().decode(request.cursor())));
@@ -41,7 +43,8 @@ public class PegawaiService {
                 Pegawai.class,
                 cursorUuid,
                 request.limit() + 1,
-                true
+                sortBy,
+                direction
         );
 
         boolean hasNext = entities.size() > request.limit();
@@ -63,6 +66,10 @@ public class PegawaiService {
         }
 
         return CursorPage.of(responses, nextCursor, hasNext);
+    }
+
+    public CursorPage<PegawaiResponse> list(CursorRequest request) {
+        return list(request, PegawaiSortableField.ID, SortDirection.ASC);
     }
 
     public PegawaiResponse getByUuid(String uuid) {

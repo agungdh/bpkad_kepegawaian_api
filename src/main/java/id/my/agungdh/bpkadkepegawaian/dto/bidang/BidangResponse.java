@@ -4,7 +4,5 @@ public record BidangResponse(
         String uuid,
         String skpdUuid,
         String skpdNama,
-        String nama,
-        Long createdAt,
-        Long updatedAt
+        String nama
 ) {}

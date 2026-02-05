@@ -8,7 +8,5 @@ public record PegawaiResponse(
         String skpdUuid,
         String skpdNama,
         String bidangUuid,
-        String bidangNama,
-        Long createdAt,
-        Long updatedAt
+        String bidangNama
 ) {}

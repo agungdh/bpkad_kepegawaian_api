@@ -5,6 +5,8 @@ import id.my.agungdh.bpkadkepegawaian.dto.CursorRequest;
 import id.my.agungdh.bpkadkepegawaian.dto.bidang.BidangCreateRequest;
 import id.my.agungdh.bpkadkepegawaian.dto.bidang.BidangResponse;
 import id.my.agungdh.bpkadkepegawaian.dto.bidang.BidangUpdateRequest;
+import id.my.agungdh.bpkadkepegawaian.dto.sort.BidangSortableField;
+import id.my.agungdh.bpkadkepegawaian.dto.sort.SortDirection;
 import id.my.agungdh.bpkadkepegawaian.entity.Bidang;
 import id.my.agungdh.bpkadkepegawaian.entity.Skpd;
 import id.my.agungdh.bpkadkepegawaian.mapper.BidangMapper;
@@ -26,7 +28,7 @@ public class BidangService {
     private final BidangMapper bidangMapper;
     private final CursorPaginationRepository cursorPaginationRepository;
 
-    public CursorPage<BidangResponse> list(CursorRequest request) {
+    public CursorPage<BidangResponse> list(CursorRequest request, BidangSortableField sortBy, SortDirection direction) {
         UUID cursorUuid = null;
         if (request.cursor() != null) {
             cursorUuid = UUID.fromString(new String(java.util.Base64.getDecoder().decode(request.cursor())));
@@ -36,7 +38,8 @@ public class BidangService {
                 Bidang.class,
                 cursorUuid,
                 request.limit() + 1,
-                true
+                sortBy,
+                direction
         );
 
         boolean hasNext = entities.size() > request.limit();
@@ -62,6 +65,10 @@ public class BidangService {
         }
 
         return CursorPage.of(responses, nextCursor, hasNext);
+    }
+
+    public CursorPage<BidangResponse> list(CursorRequest request) {
+        return list(request, BidangSortableField.ID, SortDirection.ASC);
     }
 
     public BidangResponse getByUuid(String uuid) {

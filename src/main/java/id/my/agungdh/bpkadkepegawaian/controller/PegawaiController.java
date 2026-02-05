@@ -5,6 +5,8 @@ import id.my.agungdh.bpkadkepegawaian.dto.CursorRequest;
 import id.my.agungdh.bpkadkepegawaian.dto.pegawai.PegawaiCreateRequest;
 import id.my.agungdh.bpkadkepegawaian.dto.pegawai.PegawaiResponse;
 import id.my.agungdh.bpkadkepegawaian.dto.pegawai.PegawaiUpdateRequest;
+import id.my.agungdh.bpkadkepegawaian.dto.sort.PegawaiSortableField;
+import id.my.agungdh.bpkadkepegawaian.dto.sort.SortDirection;
 import id.my.agungdh.bpkadkepegawaian.service.PegawaiService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,9 +29,15 @@ public class PegawaiController {
     public CursorPage<PegawaiResponse> list(
             @Parameter(description = "Cursor untuk halaman selanjutnya")
             @RequestParam(required = false) String cursor,
-            @RequestParam(defaultValue = "20") Integer limit
+            @RequestParam(defaultValue = "20") Integer limit,
+            @Parameter(description = "Kolom untuk sorting (id, nip, nama, email, skpdId, bidangId, createdAt, updatedAt)")
+            @RequestParam(required = false) String sortBy,
+            @Parameter(description = "Arah sorting (ASC, DESC)")
+            @RequestParam(required = false) String sortDirection
     ) {
-        return pegawaiService.list(new CursorRequest(cursor, limit).withDefaults());
+        PegawaiSortableField sortField = sortBy != null ? PegawaiSortableField.valueOf(sortBy) : PegawaiSortableField.ID;
+        SortDirection direction = sortDirection != null ? SortDirection.valueOf(sortDirection) : SortDirection.ASC;
+        return pegawaiService.list(new CursorRequest(cursor, limit).withDefaults(), sortField, direction);
     }
 
     @GetMapping("/{uuid}")

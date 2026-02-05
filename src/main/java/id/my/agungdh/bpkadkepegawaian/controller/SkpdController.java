@@ -5,6 +5,8 @@ import id.my.agungdh.bpkadkepegawaian.dto.CursorRequest;
 import id.my.agungdh.bpkadkepegawaian.dto.skpd.SkpdCreateRequest;
 import id.my.agungdh.bpkadkepegawaian.dto.skpd.SkpdResponse;
 import id.my.agungdh.bpkadkepegawaian.dto.skpd.SkpdUpdateRequest;
+import id.my.agungdh.bpkadkepegawaian.dto.sort.SortDirection;
+import id.my.agungdh.bpkadkepegawaian.dto.sort.SkpdSortableField;
 import id.my.agungdh.bpkadkepegawaian.service.SkpdService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -26,9 +28,15 @@ public class SkpdController {
     public CursorPage<SkpdResponse> list(
             @Parameter(description = "Cursor untuk halaman selanjutnya")
             @RequestParam(required = false) String cursor,
-            @RequestParam(defaultValue = "20") Integer limit
+            @RequestParam(defaultValue = "20") Integer limit,
+            @Parameter(description = "Kolom untuk sorting (id, nama, createdAt, updatedAt)")
+            @RequestParam(required = false) String sortBy,
+            @Parameter(description = "Arah sorting (ASC, DESC)")
+            @RequestParam(required = false) String sortDirection
     ) {
-        return skpdService.list(new CursorRequest(cursor, limit).withDefaults());
+        SkpdSortableField sortField = sortBy != null ? SkpdSortableField.valueOf(sortBy) : SkpdSortableField.ID;
+        SortDirection direction = sortDirection != null ? SortDirection.valueOf(sortDirection) : SortDirection.ASC;
+        return skpdService.list(new CursorRequest(cursor, limit).withDefaults(), sortField, direction);
     }
 
     @GetMapping("/{uuid}")

@@ -5,6 +5,8 @@ import id.my.agungdh.bpkadkepegawaian.dto.CursorRequest;
 import id.my.agungdh.bpkadkepegawaian.dto.skpd.SkpdCreateRequest;
 import id.my.agungdh.bpkadkepegawaian.dto.skpd.SkpdResponse;
 import id.my.agungdh.bpkadkepegawaian.dto.skpd.SkpdUpdateRequest;
+import id.my.agungdh.bpkadkepegawaian.dto.sort.SortDirection;
+import id.my.agungdh.bpkadkepegawaian.dto.sort.SkpdSortableField;
 import id.my.agungdh.bpkadkepegawaian.entity.Skpd;
 import id.my.agungdh.bpkadkepegawaian.mapper.SkpdMapper;
 import id.my.agungdh.bpkadkepegawaian.repository.SkpdRepository;
@@ -24,7 +26,7 @@ public class SkpdService {
     private final SkpdMapper skpdMapper;
     private final CursorPaginationRepository cursorPaginationRepository;
 
-    public CursorPage<SkpdResponse> list(CursorRequest request) {
+    public CursorPage<SkpdResponse> list(CursorRequest request, SkpdSortableField sortBy, SortDirection direction) {
         UUID cursorUuid = null;
         if (request.cursor() != null) {
             cursorUuid = UUID.fromString(new String(java.util.Base64.getDecoder().decode(request.cursor())));
@@ -34,7 +36,8 @@ public class SkpdService {
                 Skpd.class,
                 cursorUuid,
                 request.limit() + 1,
-                true
+                sortBy,
+                direction
         );
 
         boolean hasNext = entities.size() > request.limit();
@@ -53,6 +56,10 @@ public class SkpdService {
         }
 
         return CursorPage.of(responses, nextCursor, hasNext);
+    }
+
+    public CursorPage<SkpdResponse> list(CursorRequest request) {
+        return list(request, SkpdSortableField.ID, SortDirection.ASC);
     }
 
     public SkpdResponse getByUuid(String uuid) {
