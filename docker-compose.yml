@@ -37,7 +37,7 @@ services:
     environment:
       ADMINER_DESIGN: nette
     volumes:
-      - ./docker/adminer/login.php:/var/www/html/login.inc.php:ro
+      - ./docker/adminer/index.php:/var/www/html/index.php:ro
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080"]
       interval: 10s

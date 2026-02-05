@@ -1,13 +1,15 @@
 <?php
-// Auto-login for Adminer - only use for local development!
+// Auto-login wrapper for Adminer
 function adminer_object() {
+    require_once '/var/www/html/adminer/include/adminer.inc.php';
+
     class CustomAdminer extends Adminer {
         public function name() {
             return 'BPKAD Kepegawaian';
         }
 
         public function credentials() {
-            return ['postgres', 'postgres', 'postgres']; // server, username, password
+            return ['postgres', 'postgres', 'postgres'];
         }
 
         public function database() {
@@ -15,11 +17,11 @@ function adminer_object() {
         }
 
         public function login($login, $password) {
-            return true; // Auto-login
+            return true;
         }
     }
 
     return new CustomAdminer();
 }
 
-require_once 'adminer.php';
+require_once '/var/www/html/adminer/include/bootstrap.inc.php';
