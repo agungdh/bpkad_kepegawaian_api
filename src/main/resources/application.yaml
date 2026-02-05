@@ -2,9 +2,7 @@ spring:
   application:
     name: bpkad-kepegawaian
   flyway:
-    enabled: true
-    locations: classpath:db/migration
-    baseline-on-migrate: true
+    enabled: false # disable Flyway for local dev, use Hibernate ddl-auto instead
   datasource:
     url: jdbc:postgresql://localhost:5432/bpkad_kepegawaian
     username: postgres
@@ -12,9 +10,8 @@ spring:
     hikari:
       maximum-pool-size: 2 # low pool size since we're using virtual threads
   jpa:
-    defer-datasource-initialization: true # JPA waits for Flyway first
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update # auto-create/update tables
     properties:
       org.hibernate:
         dialect: org.hibernate.community.dialect.PostgreSQLDialect
