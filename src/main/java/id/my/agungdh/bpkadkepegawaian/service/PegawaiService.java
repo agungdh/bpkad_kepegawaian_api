@@ -34,7 +34,7 @@ public class PegawaiService {
     public CursorPage<PegawaiResponse> list(CursorRequest request) {
         UUID cursorUuid = null;
         if (request.cursor() != null) {
-            cursorUuid = UUID.fromString(new String(java.util.Base64.getDecoder().decode(request.cursor())).split(":")[0]);
+            cursorUuid = UUID.fromString(new String(java.util.Base64.getDecoder().decode(request.cursor())));
         }
 
         List<Pegawai> entities = cursorPaginationRepository.fetchCursor(
@@ -59,8 +59,7 @@ public class PegawaiService {
         String nextCursor = null;
         if (hasNext && !entities.isEmpty()) {
             Pegawai last = entities.get(entities.size() - 1);
-            String cursorValueStr = last.getUuid() + ":" + last.getUpdatedAt();
-            nextCursor = java.util.Base64.getEncoder().encodeToString(cursorValueStr.getBytes());
+            nextCursor = java.util.Base64.getEncoder().encodeToString(last.getUuid().toString().getBytes());
         }
 
         return CursorPage.of(responses, nextCursor, hasNext);
