@@ -7,6 +7,7 @@ import id.my.agungdh.bpkadkepegawaian.dto.pegawai.PegawaiResponse;
 import id.my.agungdh.bpkadkepegawaian.dto.pegawai.PegawaiUpdateRequest;
 import id.my.agungdh.bpkadkepegawaian.dto.sort.PegawaiSortableField;
 import id.my.agungdh.bpkadkepegawaian.dto.sort.SortDirection;
+import id.my.agungdh.bpkadkepegawaian.dto.sort.SortableField;
 import id.my.agungdh.bpkadkepegawaian.service.PegawaiService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -35,8 +36,10 @@ public class PegawaiController {
             @Parameter(description = "Arah sorting (ASC, DESC)")
             @RequestParam(required = false) String sortDirection
     ) {
-        PegawaiSortableField sortField = sortBy != null ? PegawaiSortableField.valueOf(sortBy) : PegawaiSortableField.ID;
-        SortDirection direction = sortDirection != null ? SortDirection.valueOf(sortDirection) : SortDirection.ASC;
+        PegawaiSortableField sortField = SortableField.fromString(PegawaiSortableField.class, sortBy);
+        if (sortField == null) sortField = PegawaiSortableField.ID;
+        SortDirection direction = SortDirection.fromString(sortDirection);
+        if (direction == null) direction = SortDirection.ASC;
         return pegawaiService.list(CursorRequest.of(cursor, limit), sortField, direction);
     }
 

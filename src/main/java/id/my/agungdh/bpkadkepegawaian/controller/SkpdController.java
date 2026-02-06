@@ -7,6 +7,7 @@ import id.my.agungdh.bpkadkepegawaian.dto.skpd.SkpdResponse;
 import id.my.agungdh.bpkadkepegawaian.dto.skpd.SkpdUpdateRequest;
 import id.my.agungdh.bpkadkepegawaian.dto.sort.SortDirection;
 import id.my.agungdh.bpkadkepegawaian.dto.sort.SkpdSortableField;
+import id.my.agungdh.bpkadkepegawaian.dto.sort.SortableField;
 import id.my.agungdh.bpkadkepegawaian.service.SkpdService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,8 +35,10 @@ public class SkpdController {
             @Parameter(description = "Arah sorting (ASC, DESC)")
             @RequestParam(required = false) String sortDirection
     ) {
-        SkpdSortableField sortField = sortBy != null ? SkpdSortableField.valueOf(sortBy) : SkpdSortableField.ID;
-        SortDirection direction = sortDirection != null ? SortDirection.valueOf(sortDirection) : SortDirection.ASC;
+        SkpdSortableField sortField = SortableField.fromString(SkpdSortableField.class, sortBy);
+        if (sortField == null) sortField = SkpdSortableField.ID;
+        SortDirection direction = SortDirection.fromString(sortDirection);
+        if (direction == null) direction = SortDirection.ASC;
         return skpdService.list(CursorRequest.of(cursor, limit), sortField, direction);
     }
 

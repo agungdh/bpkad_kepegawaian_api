@@ -7,6 +7,7 @@ import id.my.agungdh.bpkadkepegawaian.dto.bidang.BidangResponse;
 import id.my.agungdh.bpkadkepegawaian.dto.bidang.BidangUpdateRequest;
 import id.my.agungdh.bpkadkepegawaian.dto.sort.BidangSortableField;
 import id.my.agungdh.bpkadkepegawaian.dto.sort.SortDirection;
+import id.my.agungdh.bpkadkepegawaian.dto.sort.SortableField;
 import id.my.agungdh.bpkadkepegawaian.service.BidangService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,8 +35,10 @@ public class BidangController {
             @Parameter(description = "Arah sorting (ASC, DESC)")
             @RequestParam(required = false) String sortDirection
     ) {
-        BidangSortableField sortField = sortBy != null ? BidangSortableField.valueOf(sortBy) : BidangSortableField.ID;
-        SortDirection direction = sortDirection != null ? SortDirection.valueOf(sortDirection) : SortDirection.ASC;
+        BidangSortableField sortField = SortableField.fromString(BidangSortableField.class, sortBy);
+        if (sortField == null) sortField = BidangSortableField.ID;
+        SortDirection direction = SortDirection.fromString(sortDirection);
+        if (direction == null) direction = SortDirection.ASC;
         return bidangService.list(CursorRequest.of(cursor, limit), sortField, direction);
     }
 
