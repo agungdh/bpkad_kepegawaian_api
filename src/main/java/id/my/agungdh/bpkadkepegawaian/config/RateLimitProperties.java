@@ -9,25 +9,49 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "application.rate-limit")
 public class RateLimitProperties {
 
-    private LoginLimit login = new LoginLimit();
-    private GlobalLimit global = new GlobalLimit();
-    private EndpointLimit endpoint = new EndpointLimit();
+    private LoginLimit login = new LoginLimit(20, 60);
+    private GlobalLimit global = new GlobalLimit(1000, 60);
+    private EndpointLimit endpoint = new EndpointLimit(200, 60);
 
     @Data
     public static class LoginLimit {
-        private int requests = 20;
-        private int ttlSeconds = 60;
+        private int requests;
+        private int ttlSeconds;
+
+        public LoginLimit() {
+        }
+
+        public LoginLimit(int requests, int ttlSeconds) {
+            this.requests = requests;
+            this.ttlSeconds = ttlSeconds;
+        }
     }
 
     @Data
     public static class GlobalLimit {
-        private int requests = 200;
-        private int ttlSeconds = 60;
+        private int requests;
+        private int ttlSeconds;
+
+        public GlobalLimit() {
+        }
+
+        public GlobalLimit(int requests, int ttlSeconds) {
+            this.requests = requests;
+            this.ttlSeconds = ttlSeconds;
+        }
     }
 
     @Data
     public static class EndpointLimit {
-        private int requests = 1000;
-        private int ttlSeconds = 60;
+        private int requests;
+        private int ttlSeconds;
+
+        public EndpointLimit() {
+        }
+
+        public EndpointLimit(int requests, int ttlSeconds) {
+            this.requests = requests;
+            this.ttlSeconds = ttlSeconds;
+        }
     }
 }
