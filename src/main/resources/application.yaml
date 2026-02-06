@@ -30,3 +30,13 @@ application:
   security:
     token:
       ttl: ${TOKEN_TTL:86400} # 24 hours in seconds
+  rate-limit:
+    login:
+      requests: ${RATE_LIMIT_LOGIN_REQUESTS:20}
+      ttl-seconds: ${RATE_LIMIT_LOGIN_TTL:60}
+    global:
+      requests: ${RATE_LIMIT_GLOBAL_REQUESTS:200}
+      ttl-seconds: ${RATE_LIMIT_GLOBAL_TTL:60}
+    endpoint:
+      requests: ${RATE_LIMIT_ENDPOINT_REQUESTS:1000}
+      ttl-seconds: ${RATE_LIMIT_ENDPOINT_TTL:60}

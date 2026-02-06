@@ -1,5 +1,6 @@
 package id.my.agungdh.bpkadkepegawaian.config;
 
+import id.my.agungdh.bpkadkepegawaian.security.RateLimitFilter;
 import id.my.agungdh.bpkadkepegawaian.security.TokenAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +32,7 @@ import java.util.List;
 public class SecurityConfig {
 
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
+    private final RateLimitFilter rateLimitFilter;
     private final UserDetailsService userDetailsService;
 
     private static final String[] WHITE_LIST_URLS = {
@@ -59,6 +61,7 @@ public class SecurityConfig {
                         .requestMatchers(WHITE_LIST_URLS).permitAll()
                         .anyRequest().authenticated()
                 )
+                .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
